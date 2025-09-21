@@ -5,7 +5,7 @@ import urllib.parse
 
 # Set page configuration
 st.set_page_config(
-    page_title="StyleHub - Modern Shopping",
+    page_title="Pika Hub - Modern Shopping",
     page_icon="🛍️",
     layout="wide",
     initial_sidebar_state="expanded"
