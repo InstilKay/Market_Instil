@@ -5,7 +5,7 @@ import urllib.parse
 
 # Set page configuration
 st.set_page_config(
-    page_title="StyleHub - Modern Shopping",
+    page_title="PikaHub - Modern Shopping",
     page_icon="🛍️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -304,7 +304,7 @@ if 'show_categories' not in st.session_state:
     st.session_state.show_categories = False
 
 # Header section
-st.markdown('<h1 class="main-header">🛍️ StyleHub Ghana</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">🛍️ Pika Hub Ghana</h1>', unsafe_allow_html=True)
 st.markdown("### Discover the latest trends and shop your favorite products")
 
 # Main Menu Button on Homepage
