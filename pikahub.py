@@ -5,7 +5,7 @@ import urllib.parse
 
 # Set page configuration
 st.set_page_config(
-    page_title="Pika Hub - Modern Shopping",
+    page_title="Pika StyleHub - Modern Shopping",
     page_icon="🛍️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -53,52 +53,6 @@ st.markdown("""
         object-fit: cover;
         border-radius: 10px;
     }
-    .carousel-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        border: none;
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-        font-size: 18px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-    .carousel-nav:hover {
-        background-color: rgba(255, 255, 255, 1);
-        transform: translateY(-50%) scale(1.1);
-    }
-    .carousel-prev {
-        left: 10px;
-    }
-    .carousel-next {
-        right: 10px;
-    }
-    .carousel-dots {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 5px;
-    }
-    .carousel-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    .carousel-dot.active {
-        background-color: rgba(255, 255, 255, 1);
-        transform: scale(1.2);
-    }
     .image-counter {
         position: absolute;
         top: 10px;
@@ -121,6 +75,13 @@ st.markdown("""
         color: #FF4B4B;
         font-size: 18px;
         margin-bottom: 8px;
+    }
+    .product-description {
+        font-weight: 400;
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 8px;
+        font-style: italic;
     }
     .product-stock {
         font-weight: 500;
@@ -237,8 +198,7 @@ products = [
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+            "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
         ]
     },
     {
@@ -260,8 +220,7 @@ products = [
         "stock": 22,
         "whatsapp_number": "233275696787",
         "image_urls": [
-            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
         ]
     },
     {
@@ -271,13 +230,13 @@ products = [
         "category": "Electronics",
         "stock": 3,
         "whatsapp_number": "233246729676",
+        "description": "8GB RAM and 256GB storage",
         "image_urls": [
+            "https://i.imgur.com/HCfqBWJ.jpeg",
             "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=fir7mmj0cdian7kyw5q5bxcifj7u4462&file_id=f_1993599277353",
-            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=xks2f0cyxepasq7rcb4n3ebyru6okbyx&file_id=f_1993599956661",
-            "https://i.imgur.com/HCfqBWJ.jpeg"
+            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=xks2f0cyxepasq7rcb4n3ebyru6okbyx&file_id=f_1993599956661"
         ]
-    },
-    # ... other products (keep your existing products)
+    }
 ]
 
 # Function to create WhatsApp message
@@ -304,7 +263,7 @@ if 'show_categories' not in st.session_state:
     st.session_state.show_categories = False
 
 # Header section
-st.markdown('<h1 class="main-header">🛍️ Pika Marketing Hub Ghana</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>', unsafe_allow_html=True)
 st.markdown("### Discover the latest trends and shop your favorite products")
 
 # Main Menu Button on Homepage
@@ -413,6 +372,10 @@ for index, product in enumerate(filtered_products):
         
         st.markdown(f'<div class="product-title">{product["name"]}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-price">GHS {product["price"]:.2f}</div>', unsafe_allow_html=True)
+        
+        # Add description if it exists - MOVED INSIDE THE PRODUCT LOOP
+        if "description" in product:
+            st.markdown(f'<div class="product-description">{product["description"]}</div>', unsafe_allow_html=True)
         
         # Display stock information
         if product["stock"] > 0:
