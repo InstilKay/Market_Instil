@@ -5,7 +5,7 @@ import urllib.parse
 
 # Set page configuration
 st.set_page_config(
-    page_title="Pika Hub - Modern Shopping",
+    page_title="StyleHub - Modern Shopping",
     page_icon="🛍️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -39,12 +39,75 @@ st.markdown("""
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
-    .product-image {
+    .product-image-container {
+        position: relative;
         border-radius: 10px;
         margin-bottom: 12px;
         height: 200px;
-        object-fit: cover;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+    .product-main-image {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+    .carousel-nav:hover {
+        background-color: rgba(255, 255, 255, 1);
+        transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-prev {
+        left: 10px;
+    }
+    .carousel-next {
+        right: 10px;
+    }
+    .carousel-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 5px;
+    }
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .carousel-dot.active {
+        background-color: rgba(255, 255, 255, 1);
+        transform: scale(1.2);
+    }
+    .image-counter {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 12px;
     }
     .product-title {
         font-weight: 600;
@@ -160,33 +223,10 @@ st.markdown("""
         background-color: #E63B3B;
         transform: scale(1.05);
     }
-    .category-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-    .category-item {
-        background-color: #F0F2F6;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-weight: 600;
-    }
-    .category-item:hover {
-        background-color: #FF4B4B;
-        color: white;
-    }
-    .category-item.selected {
-        background-color: #FF4B4B;
-        color: white;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# Sample product data with availability and prices in Ghana Cedis
+# Sample product data with multiple images support
 products = [
     {
         "id": 1,
@@ -194,7 +234,12 @@ products = [
         "price": 1150.00,
         "category": "Electronics",
         "stock": 15,
-        "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVaZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        "whatsapp_number": "233275696787",
+        "image_urls": [
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+            "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        ]
     },
     {
         "id": 2,
@@ -202,7 +247,10 @@ products = [
         "price": 920.00,
         "category": "Accessories",
         "stock": 8,
-        "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        "whatsapp_number": "233275696787",
+        "image_urls": [
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        ]
     },
     {
         "id": 3,
@@ -210,56 +258,44 @@ products = [
         "price": 290.00,
         "category": "Clothing",
         "stock": 22,
-        "image_url": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        "whatsapp_number": "233275696787",
+        "image_urls": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+        ]
     },
     {
         "id": 4,
-        "name": "Smart Fitness Tracker",
-        "price": 520.00,
+        "name": "Samsung Galaxy s22",
+        "price": 5200.00,
         "category": "Electronics",
         "stock": 3,
-        "image_url": "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZpdG5lc3MlMjB0cmFja2VyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+        "whatsapp_number": "233246729676",
+        "image_urls": [
+            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=fir7mmj0cdian7kyw5q5bxcifj7u4462&file_id=f_1993599277353",
+            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=xks2f0cyxepasq7rcb4n3ebyru6okbyx&file_id=f_1993599956661",
+            "https://i.imgur.com/HCfqBWJ.jpeg"
+        ]
     },
-    {
-        "id": 5,
-        "name": "Luxury Perfume Collection",
-        "price": 750.00,
-        "category": "Beauty",
-        "stock": 12,
-        "image_url": "https://images.unsplash.com/photo-1592945403407-9de659572da9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-    },
-    {
-        "id": 6,
-        "name": "Minimalist Sneakers",
-        "price": 460.00,
-        "category": "Footwear",
-        "stock": 0,
-        "image_url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c25eYWtlcnN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-    },
-    {
-        "id": 7,
-        "name": "Designer Handbag",
-        "price": 1730.00,
-        "category": "Accessories",
-        "stock": 5,
-        "image_url": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aGFuZGJhZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-    },
-    {
-        "id": 8,
-        "name": "Wireless Charging Pad",
-        "price": 230.00,
-        "category": "Electronics",
-        "stock": 18,
-        "image_url": "https://images.unsplash.com/photo-1579118126029-8f2c813b5b82?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2lyZWxlc3MlMjBjaGFyZ2VyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
-    }
+    # ... other products (keep your existing products)
 ]
 
 # Function to create WhatsApp message
-def create_whatsapp_message(product_name, product_price):
-    phone_number = "233275696787"  # Remove the + for the URL
+def create_whatsapp_message(product_name, product_price, whatsapp_number):
     message = f"Hello! I would like to buy the {product_name} for GHS {product_price:.2f}. Please let me know about availability and payment options."
     encoded_message = urllib.parse.quote(message)
-    return f"https://wa.me/{phone_number}?text={encoded_message}"
+    return f"https://wa.me/{whatsapp_number}?text={encoded_message}"
+
+# Initialize session state for image selection
+if 'selected_image_index' not in st.session_state:
+    st.session_state.selected_image_index = {}
+
+# Function to handle image selection
+def get_selected_image_index(product_id):
+    return st.session_state.selected_image_index.get(product_id, 0)
+
+def set_selected_image_index(product_id, index):
+    st.session_state.selected_image_index[product_id] = index
 
 # Initialize session state
 if 'selected_category' not in st.session_state:
@@ -268,7 +304,7 @@ if 'show_categories' not in st.session_state:
     st.session_state.show_categories = False
 
 # Header section
-st.markdown('<h1 class="main-header">🛍️ Pika Hub Ghana</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">🛍️ StyleHub Ghana</h1>', unsafe_allow_html=True)
 st.markdown("### Discover the latest trends and shop your favorite products")
 
 # Main Menu Button on Homepage
@@ -346,7 +382,34 @@ for index, product in enumerate(filtered_products):
         # Product card
         st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
         
-        st.image(product["image_url"], use_container_width=True)
+        # Handle multiple images with carousel
+        if len(product["image_urls"]) > 0:
+            current_index = get_selected_image_index(product["id"])
+            total_images = len(product["image_urls"])
+            
+            # Image container with carousel
+            st.markdown(f'''
+            <div class="product-image-container">
+                <img src="{product["image_urls"][current_index]}" class="product-main-image" alt="{product["name"]}">
+                <div class="image-counter">{current_index + 1}/{total_images}</div>
+            ''', unsafe_allow_html=True)
+            
+            # Navigation buttons (only show if multiple images)
+            if total_images > 1:
+                col1, col2, col3 = st.columns([1, 2, 1])
+                with col1:
+                    if st.button("◀", key=f"prev_{product['id']}"):
+                        new_index = (current_index - 1) % total_images
+                        set_selected_image_index(product["id"], new_index)
+                        st.rerun()
+                
+                with col3:
+                    if st.button("▶", key=f"next_{product['id']}"):
+                        new_index = (current_index + 1) % total_images
+                        set_selected_image_index(product["id"], new_index)
+                        st.rerun()
+            
+            st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown(f'<div class="product-title">{product["name"]}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-price">GHS {product["price"]:.2f}</div>', unsafe_allow_html=True)
@@ -357,7 +420,7 @@ for index, product in enumerate(filtered_products):
             st.markdown(f'<div class="product-stock {stock_class}">In stock: {product["stock"]} available</div>', unsafe_allow_html=True)
             
             # Create WhatsApp link
-            whatsapp_url = create_whatsapp_message(product["name"], product["price"])
+            whatsapp_url = create_whatsapp_message(product["name"], product["price"], product["whatsapp_number"])
             st.markdown(f'<a href="{whatsapp_url}" target="_blank" class="whatsapp-link">Buy Now on WhatsApp</a>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div class="product-stock low-stock">Out of stock</div>', unsafe_allow_html=True)
