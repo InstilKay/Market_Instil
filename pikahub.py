@@ -280,7 +280,7 @@ if 'show_categories' not in st.session_state:
 
 # Header section
 st.markdown('<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>', unsafe_allow_html=True)
-st.markdown("###Discover the latest trends and shop your favorite products")
+st.markdown("Discover the latest trends and shop your favorite products")
 
 # Main Menu Button on Homepage
 col1, col2, col3 = st.columns([1, 2, 1])
