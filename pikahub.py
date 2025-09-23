@@ -236,6 +236,22 @@ products = [
             "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=fir7mmj0cdian7kyw5q5bxcifj7u4462&file_id=f_1993599277353",
             "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=xks2f0cyxepasq7rcb4n3ebyru6okbyx&file_id=f_1993599956661"
         ]
+    },
+    {
+        "id": 5,
+        "name": "Toyota Corrolla 2007 model",
+        "price": 65000.00,
+        "category": "Electronics",
+        "stock": 1,
+        "whatsapp_number": "233246729676",
+        "description": "Totoya Corrola 2012 registered with reverse camera and Alley rims",
+        "image_urls": [
+            "https://i.imgur.com/H0009Rv.jpeg",
+            "https://i.imgur.com/8cBjcjA.jpeg",
+            "https://i.imgur.com/es6AzB2.jpeg",
+            "https://i.imgur.com/4CWA1LD.jpeg",
+            "https://i.imgur.com/wdIpeE6.jpeg"
+        ]
     }
 ]
 
@@ -264,7 +280,7 @@ if 'show_categories' not in st.session_state:
 
 # Header section
 st.markdown('<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>', unsafe_allow_html=True)
-st.markdown("### Discover the latest trends and shop your favorite products")
+st.markdown("###Discover the latest trends and shop your favorite products")
 
 # Main Menu Button on Homepage
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -277,7 +293,7 @@ if st.session_state.show_categories:
     st.markdown("---")
     st.markdown("### 🏷️ Product Categories")
     
-    categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear"]
+    categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear","Food"]
     
     # Create a grid of category buttons
     cols = st.columns(3)
@@ -291,7 +307,7 @@ if st.session_state.show_categories:
 # Sidebar with categories and statistics
 st.sidebar.markdown('<div class="menu-header">📋 QUICK MENU</div>', unsafe_allow_html=True)
 
-categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear"]
+categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear","Food"]
 
 # Create category buttons in sidebar
 for category in categories:
@@ -401,6 +417,7 @@ st.markdown(
     <div style="text-align: center; color: #666;">
         <p>© 2023 StyleHub Ghana - Modern Shopping Experience</p>
         <p>All prices in Ghana Cedis (GHS) | Contact us: +233 27 569 6787 | instilpee@gmail.com</p>
+        <p><strong>Disclaimer:</strong>Please note this application is solely responsible for connecting buyers to sellers only, any other due diligue is your responsiblity </p>
         <p>Click "Buy Now on WhatsApp" to contact us directly about your order</p>
     </div>
     """,
