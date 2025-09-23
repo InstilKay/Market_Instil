@@ -415,10 +415,10 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align: center; color: #666;">
-        <p>© 2023 StyleHub Ghana - Modern Shopping Experience</p>
+        <p>© 2023 Pika market square Hub Ghana - Modern Shopping Experience. Call us or send an email to advertise your products here </p>
         <p>All prices in Ghana Cedis (GHS) | Contact us: +233 27 569 6787 | instilpee@gmail.com</p>
         <p><strong>Disclaimer:</strong>Please note this application is solely responsible for connecting buyers to sellers only, any other due diligue is your responsiblity </p>
-        <p>Click "Buy Now on WhatsApp" to contact us directly about your order</p>
+        <p>Click "Buy Now on WhatsApp" to contact seller directly about your order</p>
     </div>
     """,
     unsafe_allow_html=True
