@@ -194,7 +194,7 @@ products = [
         "name": "Premium Wireless Headphones",
         "price": 1150.00,
         "category": "Electronics",
-        "stock": 15,
+        "stock": 1,
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
@@ -206,7 +206,7 @@ products = [
         "name": "Designer Leather Watch",
         "price": 920.00,
         "category": "Accessories",
-        "stock": 8,
+        "stock": 1,
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
@@ -217,7 +217,7 @@ products = [
         "name": "Casual Summer Dress",
         "price": 290.00,
         "category": "Clothing",
-        "stock": 22,
+        "stock": 1,
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
@@ -228,7 +228,7 @@ products = [
         "name": "Samsung Galaxy s22",
         "price": 5200.00,
         "category": "Electronics",
-        "stock": 3,
+        "stock": 1,
         "whatsapp_number": "233246729676",
         "description": "8GB RAM and 256GB storage",
         "image_urls": [
