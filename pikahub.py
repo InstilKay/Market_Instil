@@ -204,13 +204,18 @@ products = [
     },
     {
         "id": 2,
-        "name": "Designer Leather Watch",
-        "price": 920.00,
+        "name": "48VH 12000 mAh Electric Car Washing Machine Water spray",
+        "price": 425.00,
         "category": "Accessories",
         "stock": 0,
         "whatsapp_number": "233275696787",
+        "description": "color: black for all car washing",
         "image_urls": [
-            ""
+            "https://i.imgur.com/IptLBNh.jpeg",
+            "https://i.imgur.com/TE9aAh6.jpeg",
+            "https://i.imgur.com/zpHfaab.jpeg",
+            "https://i.imgur.com/xLfWrez.jpeg",
+            "https://i.imgur.com/hu121Vg.jpeg"
         ]
     },
     {
