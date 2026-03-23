@@ -223,12 +223,13 @@ products = [
         "name": " Windshield sun shade UV Protector",
         "price": 155.00,
         "category": "Car Accessories",
-        "stock": 0,
+        "stock": 5,
         "whatsapp_number": "233275696787",
         "image_urls": [
+            "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true",
             "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true"
+            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true"
+            
         ]
     },
     {
