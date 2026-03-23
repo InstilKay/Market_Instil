@@ -239,7 +239,7 @@ products = [
     },
     {
         "id": 5,
-        "name": 48VH 12000mAh Electric Car Washing Machine Water spray",
+        "name":"48VH 12000 mAh Electric Car Washing Machine Water spray",
         "price": 425.00,
         "category": "Electronics",
         "stock": 1,
