@@ -196,6 +196,7 @@ products = [
         "category": "Car Accesories",
         "stock": 2,
         "whatsapp_number": "233275696787",
+        "description": "Can be used on both side Silver and Black with four mats",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
             "https://i.imgur.com/VGZJ8iM.jpeg"
@@ -209,7 +210,7 @@ products = [
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
-        "description": "color: black for all car washing",
+        "description": "color: black",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
@@ -240,7 +241,7 @@ products = [
         "category": "Car Accessories",
         "stock": 1,
         "whatsapp_number": "233246729676",
-        "description": "Can be used on both side Silver and Black",
+        "description": "Can be used on both side Silver and Black with four mats",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
             "https://i.imgur.com/VGZJ8iM.jpeg",
