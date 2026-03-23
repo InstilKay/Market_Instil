@@ -220,20 +220,22 @@ products = [
     },
     {
         "id": 3,
-        "name": "Casual Summer Dress",
-        "price": 290.00,
-        "category": "Clothing",
+        "name": " Windshield sun shade UV Protector",
+        "price": 155.00,
+        "category": "Car Accessories",
         "stock": 0,
         "whatsapp_number": "233275696787",
         "image_urls": [
-            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+            "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true"
         ]
     },
     {
         "id": 4,
         "name": "Car door Mat",
         "price": 255.00,
-        "category": "Electronics",
+        "category": "Car Accessories",
         "stock": 1,
         "whatsapp_number": "233246729676",
         "description": "Can be used on both side Silver and Black",
