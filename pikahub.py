@@ -246,7 +246,7 @@ products = [
         "whatsapp_number": "233275696787",
         "description": "color: black for all car washing",
         "image_urls": [
-            "https://i.imgur.com/H0009Rv.jpeg",
+            "https://imgur.com/a/pYxyjF7.jpeg",
             "https://i.imgur.com/8cBjcjA.jpeg",
             "https://i.imgur.com/es6AzB2.jpeg",
             "https://i.imgur.com/4CWA1LD.jpeg",
