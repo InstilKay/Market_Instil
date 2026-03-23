@@ -218,7 +218,7 @@ products = [
         "name": "Casual Summer Dress",
         "price": 290.00,
         "category": "Clothing",
-        "stock": 1,
+        "stock": 0,
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
@@ -240,8 +240,7 @@ products = [
     },
     {
         "id": 5,
-        "name":"48VH 12000 mAh Electric Car Washing Machine Water spray
-        ",
+        "name":"48VH 12000 mAh Electric Car Washing Machine Water spray   ",
         "price": 425.00,
         "category": "Electronics",
         "stock": 1,
