@@ -247,10 +247,10 @@ products = [
         "description": "color: black for all car washing",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
-            "https://i.imgur.com/8cBjcjA.jpeg",
-            "https://i.imgur.com/es6AzB2.jpeg",
-            "https://i.imgur.com/4CWA1LD.jpeg",
-            "https://i.imgur.com/wdIpeE6.jpeg"
+            "https://i.imgur.com/TE9aAh6.jpeg",
+            "https://i.imgur.com/zpHfaab.jpeg",
+            "https://i.imgur.com/xLfWrez.jpeg",
+            ""
         ]
     }
 ]
