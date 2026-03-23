@@ -64,10 +64,10 @@ st.markdown("""
         font-size: 12px;
     }
     .product-title {
-        font-weight: 600;
+        font-weight: 650;
         font-size: 16px;
-        margin-bottom: 8px;
-        height: 40px;
+        margin-bottom: 9px;
+        height: 60px;
         overflow: hidden;
     }
     .product-price {
