@@ -194,7 +194,7 @@ products = [
         "name": "Car door Mat",
         "price": 255.00,
         "category": "Car Accesories",
-        "stock": 1,
+        "stock": 2,
         "whatsapp_number": "233275696787",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
@@ -225,6 +225,7 @@ products = [
         "category": "Car Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
+        "description": "L27.56 X W57 inch",
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true",
             "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
