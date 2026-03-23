@@ -191,14 +191,15 @@ st.markdown("""
 products = [
     {
         "id": 1,
-        "name": "Premium Wireless Headphones",
-        "price": 1150.00,
-        "category": "Electronics",
+        "name": "Car door Mat",
+        "price": 255.00,
+        "category": "Car Accesories",
         "stock": 1,
         "whatsapp_number": "233275696787",
         "image_urls": [
-            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-            "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+            "https://i.imgur.com/3TJlx72.jpeg",
+            "https://i.imgur.com/VGZJ8iM.jpeg",
+            ""
         ]
     },
     {
@@ -206,10 +207,10 @@ products = [
         "name": "Designer Leather Watch",
         "price": 920.00,
         "category": "Accessories",
-        "stock": 1,
+        "stock": 0,
         "whatsapp_number": "233275696787",
         "image_urls": [
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+            ""
         ]
     },
     {
@@ -225,16 +226,16 @@ products = [
     },
     {
         "id": 4,
-        "name": "Samsung Galaxy s22",
-        "price": 5200.00,
+        "name": "Car door Mat",
+        "price": 255.00,
         "category": "Electronics",
         "stock": 1,
         "whatsapp_number": "233246729676",
-        "description": "8GB RAM and 256GB storage",
+        "description": "Can be used on both side Silver and Black",
         "image_urls": [
-            "https://i.imgur.com/HCfqBWJ.jpeg",
-            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=fir7mmj0cdian7kyw5q5bxcifj7u4462&file_id=f_1993599277353",
-            "https://app.box.com/index.php?rm=box_download_shared_file&shared_name=xks2f0cyxepasq7rcb4n3ebyru6okbyx&file_id=f_1993599956661"
+            "https://i.imgur.com/3TJlx72.jpeg",
+            "https://i.imgur.com/VGZJ8iM.jpeg",
+            ""
         ]
     },
     {
@@ -250,7 +251,7 @@ products = [
             "https://i.imgur.com/TE9aAh6.jpeg",
             "https://i.imgur.com/zpHfaab.jpeg",
             "https://i.imgur.com/xLfWrez.jpeg",
-            ""
+            "https://i.imgur.com/hu121Vg.jpeg"
         ]
     }
 ]
