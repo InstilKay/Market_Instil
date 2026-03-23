@@ -239,12 +239,12 @@ products = [
     },
     {
         "id": 5,
-        "name": "Toyota Corrolla 2007 model",
-        "price": 65000.00,
+        "name": 48VH 12000mAh Electric Car Washing Machine Water spray",
+        "price": 425.00,
         "category": "Electronics",
         "stock": 1,
         "whatsapp_number": "233275696787",
-        "description": "Totoya Corrola 2012 registered with reverse camera and Alley rims",
+        "description": "color: black for all car washing",
         "image_urls": [
             "https://i.imgur.com/H0009Rv.jpeg",
             "https://i.imgur.com/8cBjcjA.jpeg",
