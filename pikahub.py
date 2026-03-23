@@ -207,7 +207,7 @@ products = [
         "name": "48VH 12000 mAh Electric Car Washing Machine Water spray",
         "price": 425.00,
         "category": "Accessories",
-        "stock": 0,
+        "stock": 4,
         "whatsapp_number": "233275696787",
         "description": "color: black for all car washing",
         "image_urls": [
