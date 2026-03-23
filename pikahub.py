@@ -239,7 +239,7 @@ products = [
         "description": "Can be used on both side Silver and Black",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
-            "https://i.imgur.com/VGZJ8iM.jpeg"
+            "https://i.imgur.com/VGZJ8iM.jpeg",
         ]
     },
     {
