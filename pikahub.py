@@ -194,7 +194,7 @@ products = [
         "name": "Car door Mat",
         "price": 255.00,
         "category": "Accesories",
-        "stock": 2,
+        "stock": 5,
         "whatsapp_number": "233275696787",
         "description": "Can be used on both side Silver and Black with four mats",
         "image_urls": [
@@ -239,7 +239,7 @@ products = [
         "name": "Car door Mat",
         "price": 255.00,
         "category": "Accessories",
-        "stock": 1,
+        "stock": 5,
         "whatsapp_number": "233246729676",
         "description": "Can be used on both side Silver and Black with four mats",
         "image_urls": [
@@ -252,7 +252,7 @@ products = [
         "name":"48VH 12000 mAh Electric Car Washing Machine Water spray   ",
         "price": 425.00,
         "category": "Electronics",
-        "stock": 1,
+        "stock": 5,
         "whatsapp_number": "233275696787",
         "description": "color: black for all car washing",
         "image_urls": [
