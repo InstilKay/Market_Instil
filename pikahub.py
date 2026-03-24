@@ -230,7 +230,7 @@ products = [
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true",
             "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true"
+            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true",
             
         ]
     },
