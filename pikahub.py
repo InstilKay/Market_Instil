@@ -236,12 +236,12 @@ products = [
     },
     {
         "id": 4,
-        "name": "Car door Mat",
-        "price": 255.00,
+        "name": "Foldable Windshield Sun UV Rays Blocking Shade Umbrella  ",
+        "price": 160.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233246729676",
-        "description": "Can be used on both side Silver and Black with four mats",
+        "description": "(L6.5 x W12.5)cm / (L2.55 x W4.9)inch - Small/B Style ",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
             "https://i.imgur.com/VGZJ8iM.jpeg",
