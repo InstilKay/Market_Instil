@@ -222,7 +222,7 @@ products = [
     {
         "id": 3,
         "name": " Windshield sun shade UV Protector",
-        "price": 155.00,
+        "price": 145.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
@@ -237,7 +237,7 @@ products = [
     {
         "id": 4,
         "name": "Foldable Windshield Sun UV Rays Blocking Shade Umbrella  ",
-        "price": 165.00,
+        "price": 155.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233246729676",
