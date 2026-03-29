@@ -237,14 +237,14 @@ products = [
     {
         "id": 4,
         "name": "Foldable Windshield Sun UV Rays Blocking Shade Umbrella  ",
-        "price": 160.00,
+        "price": 165.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233246729676",
         "description": "(L6.5 x W12.5)cm / (L2.55 x W4.9)inch - Small/B Style ",
         "image_urls": [
-            "https://i.imgur.com/3TJlx72.jpeg",
-            "https://i.imgur.com/VGZJ8iM.jpeg",
+            "https://github.com/InstilKay/Market_Instil/blob/main/3-800x1091%20(1).jpg",
+            "https://github.com/InstilKay/Market_Instil/blob/main/670200049A_1000x1000_3-800x1091%20(1).jpg",
         ]
     },
     {
