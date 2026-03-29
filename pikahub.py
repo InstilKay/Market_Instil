@@ -64,7 +64,7 @@ st.markdown("""
         font-size: 12px;
     }
     .product-title {
-        font-weight: 650;
+        font-weight: 750;
         font-size: 16px;
         margin-bottom: 9px;
         height: 60px;
@@ -77,7 +77,7 @@ st.markdown("""
         margin-bottom: 8px;
     }
     .product-description {
-        font-weight: 400;
+        font-weight: 480;
         color: #666;
         font-size: 14px;
         margin-bottom: 8px;
