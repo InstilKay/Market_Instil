@@ -243,8 +243,8 @@ products = [
         "whatsapp_number": "233246729676",
         "description": "(L6.5 x W12.5)cm / (L2.55 x W4.9)inch - Small/B Style ",
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/3-800x1091%20(1).jpg",
-            "https://github.com/InstilKay/Market_Instil/blob/main/670200049A_1000x1000_3-800x1091%20(1).jpg",
+            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunsheild.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunshieldlength.jpg?raw=true",
         ]
     },
     {
