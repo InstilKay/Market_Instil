@@ -67,7 +67,7 @@ st.markdown("""
         font-weight: 750;
         font-size: 16px;
         margin-bottom: 9px;
-        height: 60px;
+        height: 70px;
         overflow: hidden;
     }
     .product-price {
