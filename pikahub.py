@@ -262,6 +262,32 @@ products = [
             "https://i.imgur.com/xLfWrez.jpeg",
             "https://i.imgur.com/hu121Vg.jpeg"
         ]
+    },
+    {
+        "id": 6,
+        "name":"Tomatoes",
+        "price": 50.00,
+        "category": "Food",
+        "stock": 20,
+        "whatsapp_number": "233275696787",
+        "description": "Per Olonka rubber",
+        "image_urls": [
+            "",
+
+        ]
+    },
+    {
+        "id": 7,
+        "name":"Pepper",
+        "price": 15.00,
+        "category": "Food",
+        "stock": 5,
+        "whatsapp_number": "233275696787",
+        "description": "Per Olonka rubber",
+        "image_urls": [
+            "",
+
+        ]
     }
 ]
 
