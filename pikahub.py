@@ -269,7 +269,7 @@ products = [
         "price": 50.00,
         "category": "Food",
         "stock": 30,
-        "whatsapp_number": "233256956224",
+        "whatsapp_number": "233547568955",
         "description": "Per Olonka rubber",
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/tomatoes.jpg?raw=true",
@@ -282,7 +282,7 @@ products = [
         "price": 15.00,
         "category": "Food",
         "stock": 30,
-        "whatsapp_number": "233256956224",
+        "whatsapp_number": "233547568955",
         "description": "Per Olonka rubber",
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
