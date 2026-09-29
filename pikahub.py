@@ -268,11 +268,11 @@ products = [
         "name":"Tomatoes",
         "price": 50.00,
         "category": "Food",
-        "stock": 20,
+        "stock": 30,
         "whatsapp_number": "233275696787",
         "description": "Per Olonka rubber",
         "image_urls": [
-            "",
+            "https://github.com/InstilKay/Market_Instil/blob/main/tomatoes.jpg",
 
         ]
     },
@@ -281,11 +281,11 @@ products = [
         "name":"Pepper",
         "price": 15.00,
         "category": "Food",
-        "stock": 5,
+        "stock": 30,
         "whatsapp_number": "233275696787",
         "description": "Per Olonka rubber",
         "image_urls": [
-            "",
+            "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg",
 
         ]
     }
