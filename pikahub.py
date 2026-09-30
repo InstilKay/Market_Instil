@@ -716,7 +716,7 @@ else:
                 st.markdown(
                     f"""
                     <div class="product-price">
-                        GHS {product["price"\]:,.2f}
+                        GHS {product["price"]:,.2f}
                     </div>
                     """,
                     unsafe_allow_html=True,
