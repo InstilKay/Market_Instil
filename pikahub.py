@@ -5,6 +5,17 @@ import gspread
 import streamlit as st
 from google.oauth2.service_account import Credentials
 
+import streamlit as st
+from supabase import create_client
+
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
+supabase = create_client(
+    SUPABASE_URL,
+    SUPABASE_KEY
+)
+
 
 # =========================================================
 # PAGE CONFIGURATION
@@ -783,7 +794,7 @@ else:
                         use_container_width=True,
                     ):
                         success, message = (
-                            save_request_to_google_sheet(
+                            save_request_to_supabase(
                                 product_name=product["name"],
                                 quantity=quantity,
                                 unit_price=product["price"],
