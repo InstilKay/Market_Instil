@@ -506,7 +506,7 @@ if st.session_state.show_categories:
     category_columns = st.columns(3)
 
     for category_index, category in enumerate(category_list):
-        with category_columns[category_index % 3\]:
+        with category_columns[category_index % 3]:
             if st.button(
                 f"📦 {category}",
                 key=f"main_category_{category}",
