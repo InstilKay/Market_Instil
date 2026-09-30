@@ -668,4 +668,4 @@ else:
 
                     if total_images > 1:
                         previous_column, next_column = (
-                 
+                        )
