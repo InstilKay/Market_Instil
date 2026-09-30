@@ -1,20 +1,12 @@
 import urllib.parse
-from datetime import datetime
-from zoneinfo import ZoneInfo
+
 import streamlit as st
 from supabase import create_client
-
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-
-supabase = create_client(
-    SUPABASE_URL,
-    SUPABASE_KEY
-)
 
 
 # =========================================================
 # PAGE CONFIGURATION
+# Must be the first Streamlit command
 # =========================================================
 
 st.set_page_config(
@@ -23,6 +15,73 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+
+# =========================================================
+# SUPABASE CONNECTION
+# =========================================================
+
+@st.cache_resource
+def connect_to_supabase():
+    """
+    Connect to Supabase using credentials stored in
+    Streamlit Cloud Secrets.
+    """
+
+    supabase_url = st.secrets["SUPABASE_URL"]
+    supabase_key = st.secrets["SUPABASE_KEY"]
+
+    return create_client(
+        supabase_url,
+        supabase_key,
+    )
+
+
+supabase = connect_to_supabase()
+
+
+def save_request_to_supabase(
+    product_name,
+    quantity,
+    total_price,
+):
+    """
+    Save a product request to the Supabase orders table.
+
+    Expected Supabase table columns:
+    id, product, quantity, price, order_date
+    """
+
+    try:
+        order_data = {
+            "product": str(product_name),
+            "quantity": int(quantity),
+            "price": float(total_price),
+        }
+
+        response = (
+            supabase
+            .table("orders")
+            .insert(order_data)
+            .execute()
+        )
+
+        if response.data:
+            return (
+                True,
+                "Your request was saved successfully.",
+            )
+
+        return (
+            False,
+            "Supabase did not return the saved order.",
+        )
+
+    except Exception as error:
+        return (
+            False,
+            f"The request could not be saved: {error}",
+        )
 
 
 # =========================================================
@@ -36,8 +95,7 @@ def create_whatsapp_message(
     whatsapp_number,
 ):
     """
-    Create a WhatsApp order link containing the product,
-    quantity, unit price and total price.
+    Create a WhatsApp URL containing the order details.
     """
 
     total_price = unit_price * quantity
@@ -146,9 +204,10 @@ st.markdown(
 
         .whatsapp-link {
             display: block;
+            box-sizing: border-box;
             background-color: #25D366;
             color: white !important;
-            padding: 10px 15px;
+            padding: 11px 15px;
             text-decoration: none !important;
             border-radius: 8px;
             font-weight: 600;
@@ -165,6 +224,7 @@ st.markdown(
 
         .out-of-stock-button {
             display: block;
+            box-sizing: border-box;
             background-color: #CCCCCC;
             color: white;
             padding: 10px 15px;
@@ -232,7 +292,7 @@ products = [
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
-        "description": "Colour: Black",
+        "description": "Colour: Black.",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
@@ -248,7 +308,7 @@ products = [
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "L27.56 × W57 inches",
+        "description": "L27.56 × W57 inches.",
         "image_urls": [
             (
                 "https://github.com/InstilKay/Market_Instil/"
@@ -276,7 +336,7 @@ products = [
         "whatsapp_number": "233246729676",
         "description": (
             "(L6.5 × W12.5) cm / "
-            "(L2.55 × W4.9) inches, Small/B Style"
+            "(L2.55 × W4.9) inches, Small/B Style."
         ),
         "image_urls": [
             (
@@ -299,7 +359,9 @@ products = [
         "category": "Electronics",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "Colour: Black, suitable for car washing.",
+        "description": (
+            "Colour: Black, suitable for car washing."
+        ),
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
@@ -357,6 +419,9 @@ if "selected_image_index" not in st.session_state:
 if "submitted_requests" not in st.session_state:
     st.session_state.submitted_requests = {}
 
+if "submitting_product" not in st.session_state:
+    st.session_state.submitting_product = None
+
 
 def get_selected_image_index(product_id):
     return st.session_state.selected_image_index.get(
@@ -365,8 +430,10 @@ def get_selected_image_index(product_id):
     )
 
 
-def set_selected_image_index(product_id, index):
-    st.session_state.selected_image_index[product_id] = index
+def set_selected_image_index(product_id, image_index):
+    st.session_state.selected_image_index[
+        product_id
+    ] = image_index
 
 
 # =========================================================
@@ -374,7 +441,9 @@ def set_selected_image_index(product_id, index):
 # =========================================================
 
 st.markdown(
-    '<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>',
+    '<h1 class="main-header">'
+    '🛍️ Pika Market Hub Ghana'
+    '</h1>',
     unsafe_allow_html=True,
 )
 
@@ -393,7 +462,9 @@ st.markdown(
 # MAIN MENU
 # =========================================================
 
-menu_col1, menu_col2, menu_col3 = st.columns([1, 2, 1])
+menu_col1, menu_col2, menu_col3 = st.columns(
+    [1, 2, 1]
+)
 
 with menu_col2:
     if st.button(
@@ -423,14 +494,18 @@ if st.session_state.show_categories:
 
     category_columns = st.columns(3)
 
-    for category_index, category in enumerate(category_list):
-        with category_columns[category_index % 3]:
+    for category_index, category in enumerate(
+        category_list
+    ):
+        with category_columns[category_index % 3\]:
             if st.button(
                 f"📦 {category}",
                 key=f"main_category_{category}",
                 use_container_width=True,
             ):
-                st.session_state.selected_category = category
+                st.session_state.selected_category = (
+                    category
+                )
                 st.session_state.show_categories = False
                 st.rerun()
 
@@ -455,6 +530,7 @@ for category in category_list:
 
 
 st.sidebar.markdown("---")
+
 st.sidebar.markdown(
     f"**Selected Category:** "
     f"{st.session_state.selected_category}"
@@ -464,7 +540,8 @@ st.sidebar.markdown(
 total_products = len(products)
 
 available_products = sum(
-    1 for product in products
+    1
+    for product in products
     if product["stock"] > 0
 )
 
@@ -476,8 +553,14 @@ out_of_stock_products = (
 st.sidebar.markdown("---")
 st.sidebar.markdown("## 📊 Inventory Statistics")
 st.sidebar.metric("Total Products", total_products)
-st.sidebar.metric("Available Products", available_products)
-st.sidebar.metric("Out of Stock", out_of_stock_products)
+st.sidebar.metric(
+    "Available Products",
+    available_products,
+)
+st.sidebar.metric(
+    "Out of Stock",
+    out_of_stock_products,
+)
 
 
 # =========================================================
@@ -496,7 +579,8 @@ else:
 
 
 available_in_category = sum(
-    1 for product in filtered_products
+    1
+    for product in filtered_products
     if product["stock"] > 0
 )
 
@@ -542,27 +626,31 @@ else:
     product_columns = st.columns(4)
 
     for index, product in enumerate(filtered_products):
-        with product_columns[index % 4]:
-
+        with product_columns[index % 4\]:
 
             with st.container(border=True):
 
                 # -----------------------------------------
-                # PRODUCT IMAGE CAROUSEL
+                # IMAGE CAROUSEL
                 # -----------------------------------------
 
-                image_urls = product.get("image_urls", [])
+                image_urls = product.get(
+                    "image_urls",
+                    [],
+                )
 
                 if image_urls:
-                    current_index = get_selected_image_index(
-                        product["id"]
+                    current_index = (
+                        get_selected_image_index(
+                            product["id"]
+                        )
                     )
 
                     total_images = len(image_urls)
 
-                    # Prevent an invalid image index.
                     if current_index >= total_images:
                         current_index = 0
+
                         set_selected_image_index(
                             product["id"],
                             0,
@@ -579,267 +667,5 @@ else:
                     )
 
                     if total_images > 1:
-                        previous_column, next_column = st.columns(2)
-
-                        with previous_column:
-                            if st.button(
-                                "◀ Previous",
-                                key=f"previous_{product['id']}",
-                                use_container_width=True,
-                            ):
-                                new_index = (
-                                    current_index - 1
-                                ) % total_images
-
-                                set_selected_image_index(
-                                    product["id"],
-                                    new_index,
-                                )
-
-                                st.rerun()
-
-                        with next_column:
-                            if st.button(
-                                "Next ▶",
-                                key=f"next_{product['id']}",
-                                use_container_width=True,
-                            ):
-                                new_index = (
-                                    current_index + 1
-                                ) % total_images
-
-                                set_selected_image_index(
-                                    product["id"],
-                                    new_index,
-                                )
-
-                                st.rerun()
-
-                else:
-                    st.info("No product image available.")
-
-                # -----------------------------------------
-                # PRODUCT INFORMATION
-                # -----------------------------------------
-
-                st.markdown(
-                    f"""
-                    <div class="product-title">
-                        {product["name"]}
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-                st.markdown(
-                    f"""
-                    <div class="product-price">
-                        GHS {product["price"]:,.2f}
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-                st.markdown(
-                    f"""
-                    <div class="product-description">
-                        {product["description"]}
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-                # -----------------------------------------
-                # QUANTITY AND REQUEST SUBMISSION
-                # -----------------------------------------
-
-                if product["stock"] > 0:
-
-                    stock_class = (
-                        "low-stock"
-                        if product["stock"] < 5
-                        else ""
-                    )
-
-                    st.markdown(
-                        f"""
-                        <div class="product-stock {stock_class}">
-                            In stock: {product["stock"]} available
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-                    quantity = st.number_input(
-                        "Select quantity",
-                        min_value=1,
-                        max_value=int(product["stock"]),
-                        value=1,
-                        step=1,
-                        key=f"quantity_{product['id']}",
-                    )
-
-                    total_price = (
-                        product["price"] * quantity
-                    )
-
-                    st.markdown(
-                        f"""
-                        <div class="total-price">
-                            Total: GHS {total_price:,.2f}
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-                    if st.button(
-                        "🛒 Submit Request",
-                        key=(
-                            f"submit_request_"
-                            f"{product['id']}"
-                        ),
-                        type="primary",
-                        use_container_width=True,
-                    ):
-                        success, message = (
-                            def save_request_to_supabase(
-    product_name,
-    quantity,
-    unit_price,
-    total_price
-):
-    try:
-
-        supabase.table("orders").insert({
-            "product": product_name,
-            "quantity": quantity,
-            "unit_price": float(unit_price),
-            "total_price": float(total_price)
-        }).execute()
-
-        return True, "Request saved successfully."
-
-    except Exception as e:
-        return False, str(e)
-                        )
-
-                        if success:
-                            st.session_state.submitted_requests[
-                                product["id"]
-                            ] = {
-                                "quantity": int(quantity),
-                                "unit_price": product["price"],
-                                "total_price": total_price,
-                            }
-
-                            st.success(message)
-
-                        else:
-                            st.error(message)
-
-                    # Retrieve the latest successfully
-                    # submitted request for this product.
-                    submitted_request = (
-                        st.session_state
-                        .submitted_requests
-                        .get(product["id"])
-                    )
-
-                    if submitted_request:
-                        submitted_quantity = (
-                            submitted_request["quantity"]
-                        )
-
-                        submitted_total = (
-                            submitted_request["total_price"]
-                        )
-
-                        whatsapp_url = (
-                            create_whatsapp_message(
-                                product_name=product["name"],
-                                unit_price=product["price"],
-                                quantity=submitted_quantity,
-                                whatsapp_number=(
-                                    product[
-                                        "whatsapp_number"
-                                    ]
-                                ),
-                            )
-                        )
-
-                        st.info(
-                            "Saved order: "
-                            f"{submitted_quantity} item(s), "
-                            f"GHS {submitted_total:,.2f}"
-                        )
-
-                        st.markdown(
-                            f"""
-                            {whatsapp_url}
-                                Continue Order on WhatsApp
-                            </a>
-                            """,
-                            unsafe_allow_html=True,
-                        )
-
-                else:
-                    st.markdown(
-                        """
-                        <div class="product-stock low-stock">
-                            Out of stock
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
-                        """
-                        <div class="out-of-stock-button">
-                            Out of Stock
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-
-# =========================================================
-# FOOTER
-# =========================================================
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("---")
-
-st.markdown(
-    """
-    <div style="text-align: center; color: #666666;">
-        <p>
-            © 2026 Pika Market Hub Ghana.
-            A modern shopping experience.
-        </p>
-
-      
-            Call or email us to advertise your products here.
-        </p>
-
-   
-            All prices are in Ghana Cedis (GHS).
-            Contact: +233 27 569 6787 |
-            instilpee@gmail.com
-        </p>
-
-        <p>
-            <strong>Disclaimer:</strong>
-            This application is solely responsible for
-            connecting buyers with sellers. Buyers and sellers
-            are responsible for conducting the necessary due
-            diligence before completing any transaction.
-        </p>
-
-        <p>
-            Select a quantity, submit the request and click
-            “Continue Order on WhatsApp” to contact the seller.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+                        previous_column, next_column = (
+                 
