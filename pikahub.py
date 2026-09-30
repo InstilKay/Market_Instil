@@ -624,7 +624,7 @@ else:
     product_columns = st.columns(4)
 
     for index, product in enumerate(filtered_products):
-        with product_columns[index % 4\\]:
+        with product_columns[index % 4]:
 
 
             with st.container(border=True):
