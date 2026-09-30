@@ -1,10 +1,6 @@
 import urllib.parse
 from datetime import datetime
 from zoneinfo import ZoneInfo
-import gspread
-import streamlit as st
-from google.oauth2.service_account import Credentials
-
 import streamlit as st
 from supabase import create_client
 
@@ -27,94 +23,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-
-# =========================================================
-# GOOGLE SHEETS CONFIGURATION
-# =========================================================
-
-GOOGLE_SHEET_ID = "1jqj-bRSLAZFvOFkHV_4sy3IgxvSwe7TqeAEguZ5RQd8"
-GOOGLE_WORKSHEET_GID = 1850148734
-
-
-@st.cache_resource
-def connect_to_google_sheet():
-    """
-    Connect securely to Google Sheets using the Google
-    service-account credentials stored in Streamlit Secrets.
-    """
-
-    scopes = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive",
-    ]
-
-    credentials = Credentials.from_service_account_info(
-        dict(st.secrets["gcp_service_account"]),
-        scopes=scopes,
-    )
-
-    client = gspread.authorize(credentials)
-    spreadsheet = client.open_by_key(GOOGLE_SHEET_ID)
-
-    # Select the worksheet using the gid in the Google Sheet URL.
-    worksheet = spreadsheet.get_worksheet_by_id(
-        GOOGLE_WORKSHEET_GID
-    )
-
-    if worksheet is None:
-        raise ValueError(
-            f"No worksheet was found with gid "
-            f"{GOOGLE_WORKSHEET_GID}."
-        )
-
-    return worksheet
-
-
-def save_request_to_google_sheet(
-    product_name,
-    quantity,
-    unit_price,
-    total_price,
-):
-    """
-    Save a submitted request as a new row in Google Sheets.
-
-    Required Google Sheet columns:
-    PRODUCT | QUANTITY | PRICE | DATE
-
-    The PRICE column stores the total price.
-    """
-
-    try:
-        worksheet = connect_to_google_sheet()
-
-        request_date = datetime.now(
-            ZoneInfo("Africa/Accra")
-        ).strftime("%d/%m/%Y %H:%M:%S")
-
-        worksheet.append_row(
-            [
-                product_name,
-                int(quantity),
-                float(total_price),
-                request_date,
-            ],
-            value_input_option="USER_ENTERED",
-        )
-
-        return True, (
-            f"Request submitted successfully. "
-            f"Quantity: {quantity}, "
-            f"Unit price: GHS {unit_price:,.2f}, "
-            f"Total: GHS {total_price:,.2f}"
-        )
-
-    except Exception as error:
-        return False, (
-            "The request could not be saved to Google Sheets. "
-            f"Details: {error}"
-        )
 
 
 # =========================================================
