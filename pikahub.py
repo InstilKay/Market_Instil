@@ -702,12 +702,25 @@ else:
                         use_container_width=True,
                     ):
                         success, message = (
-                            save_request_to_supabase(
-                                product_name=product["name"],
-                                quantity=quantity,
-                                unit_price=product["price"],
-                                total_price=total_price,
-                            )
+                            def save_request_to_supabase(
+    product_name,
+    quantity,
+    unit_price,
+    total_price
+):
+    try:
+
+        supabase.table("orders").insert({
+            "product": product_name,
+            "quantity": quantity,
+            "unit_price": float(unit_price),
+            "total_price": float(total_price)
+        }).execute()
+
+        return True, "Request saved successfully."
+
+    except Exception as e:
+        return False, str(e)
                         )
 
                         if success:
