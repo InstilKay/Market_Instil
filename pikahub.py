@@ -1,461 +1,914 @@
-import streamlit as st
-import pandas as pd
-from PIL import Image
 import urllib.parse
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
-# Set page configuration
+import gspread
+import streamlit as st
+from google.oauth2.service_account import Credentials
+
+
+# =========================================================
+# PAGE CONFIGURATION
+# =========================================================
+
 st.set_page_config(
-    page_title="Pika StyleHub - Modern Shopping",
+    page_title="Pika Market Hub Ghana",
     page_icon="🛍️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
-# Custom CSS for styling
-st.markdown("""
-<style>
-    .main-header {
-        font-size: 48px;
-        font-weight: 700;
-        color: #FF4B4B;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .sub-header {
-        font-size: 24px;
-        font-weight: 600;
-        color: #262730;
-        margin-bottom: 20px;
-    }
-    .product-card {
-        background-color: white;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
-        height: 100%;
-    }
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    .product-image-container {
-        position: relative;
-        border-radius: 10px;
-        margin-bottom: 12px;
-        height: 200px;
-        overflow: hidden;
-        background-color: #f8f9fa;
-    }
-    .product-main-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-    .image-counter {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        padding: 2px 8px;
-        border-radius: 10px;
-        font-size: 12px;
-    }
-    .product-title {
-        font-weight: 750;
-        font-size: 16px;
-        margin-bottom: 9px;
-        height: 70px;
-        overflow: hidden;
-    }
-    .product-price {
-        font-weight: 700;
-        color: #FF4B4B;
-        font-size: 18px;
-        margin-bottom: 8px;
-    }
-    .product-description {
-        font-weight: 480;
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 8px;
-        font-style: italic;
-    }
-    .product-stock {
-        font-weight: 500;
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 12px;
-    }
-    .low-stock {
-        color: #FF4B4B;
-        font-weight: 600;
-    }
-    .buy-button {
-        background-color: #25D366 !important;
-        color: white !important;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-weight: 600;
-        width: 100%;
-        border: none;
-    }
-    .buy-button:hover {
-        background-color: #128C7E !important;
-    }
-    .buy-button:disabled {
-        background-color: #CCCCCC !important;
-        cursor: not-allowed;
-    }
-    .category-button {
-        background-color: #F0F2F6;
-        border-radius: 8px;
-        padding: 12px 20px;
-        margin: 8px 0;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-weight: 600;
-        font-size: 16px;
-        width: 100%;
-        border: 2px solid transparent;
-    }
-    .category-button:hover {
-        background-color: #FF4B4B;
-        color: white;
-        border-color: #FF4B4B;
-        transform: scale(1.05);
-    }
-    .selected-category {
-        background-color: #FF4B4B !important;
-        color: white !important;
-        border-color: #FF4B4B !important;
-    }
-    .stats-container {
-        background-color: #F0F2F6;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-    /* Style for WhatsApp link buttons */
-    .whatsapp-link {
-        display: inline-block;
-        background-color: #25D366;
-        color: white;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        text-align: center;
-        width: 100%;
-        margin-top: 10px;
-    }
-    .whatsapp-link:hover {
-        background-color: #128C7E;
-        color: white;
-    }
-    .menu-header {
-        font-size: 24px;
-        font-weight: 700;
-        color: #FF4B4B;
-        margin-bottom: 15px;
-        text-align: center;
-        padding: 10px;
-        background-color: #F8F9FA;
-        border-radius: 8px;
-    }
-    .main-menu-button {
-        background-color: #FF4B4B;
-        color: white;
-        padding: 15px 30px;
-        font-size: 20px;
-        font-weight: 700;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
-        margin: 20px auto;
-        display: block;
-        text-align: center;
-    }
-    .main-menu-button:hover {
-        background-color: #E63B3B;
-        transform: scale(1.05);
-    }
-</style>
-""", unsafe_allow_html=True)
 
-# Sample product data with multiple images support
+# =========================================================
+# GOOGLE SHEETS CONFIGURATION
+# =========================================================
+
+GOOGLE_SHEET_ID = "1jqj-bRSLAZFvOFkHV_4sy3IgxvSwe7TqeAEguZ5RQd8"
+GOOGLE_WORKSHEET_GID = 1850148734
+
+
+@st.cache_resource
+def connect_to_google_sheet():
+    """
+    Connect securely to Google Sheets using the Google
+    service-account credentials stored in Streamlit Secrets.
+    """
+
+    scopes = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive",
+    ]
+
+    credentials = Credentials.from_service_account_info(
+        dict(st.secrets["gcp_service_account"]),
+        scopes=scopes,
+    )
+
+    client = gspread.authorize(credentials)
+    spreadsheet = client.open_by_key(GOOGLE_SHEET_ID)
+
+    # Select the worksheet using the gid in the Google Sheet URL.
+    worksheet = spreadsheet.get_worksheet_by_id(
+        GOOGLE_WORKSHEET_GID
+    )
+
+    if worksheet is None:
+        raise ValueError(
+            f"No worksheet was found with gid "
+            f"{GOOGLE_WORKSHEET_GID}."
+        )
+
+    return worksheet
+
+
+def save_request_to_google_sheet(
+    product_name,
+    quantity,
+    unit_price,
+    total_price,
+):
+    """
+    Save a submitted request as a new row in Google Sheets.
+
+    Required Google Sheet columns:
+    PRODUCT | QUANTITY | PRICE | DATE
+
+    The PRICE column stores the total price.
+    """
+
+    try:
+        worksheet = connect_to_google_sheet()
+
+        request_date = datetime.now(
+            ZoneInfo("Africa/Accra")
+        ).strftime("%d/%m/%Y %H:%M:%S")
+
+        worksheet.append_row(
+            [
+                product_name,
+                int(quantity),
+                float(total_price),
+                request_date,
+            ],
+            value_input_option="USER_ENTERED",
+        )
+
+        return True, (
+            f"Request submitted successfully. "
+            f"Quantity: {quantity}, "
+            f"Unit price: GHS {unit_price:,.2f}, "
+            f"Total: GHS {total_price:,.2f}"
+        )
+
+    except Exception as error:
+        return False, (
+            "The request could not be saved to Google Sheets. "
+            f"Details: {error}"
+        )
+
+
+# =========================================================
+# WHATSAPP FUNCTION
+# =========================================================
+
+def create_whatsapp_message(
+    product_name,
+    unit_price,
+    quantity,
+    whatsapp_number,
+):
+    """
+    Create a WhatsApp order link containing the product,
+    quantity, unit price and total price.
+    """
+
+    total_price = unit_price * quantity
+
+    message = (
+        "Hello! I would like to place the following order:\n\n"
+        f"Product: {product_name}\n"
+        f"Quantity: {quantity}\n"
+        f"Unit Price: GHS {unit_price:,.2f}\n"
+        f"Total Price: GHS {total_price:,.2f}\n\n"
+        "Please let me know about availability, delivery "
+        "and payment options."
+    )
+
+    encoded_message = urllib.parse.quote(message)
+
+    return (
+        f"https://wa.me/{whatsapp_number}"
+        f"?text={encoded_message}"
+    )
+
+
+# =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown(
+    """
+    <style>
+        .main-header {
+            font-size: 48px;
+            font-weight: 700;
+            color: #FF4B4B;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .main-description {
+            text-align: center;
+            color: #666666;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .sub-header {
+            font-size: 24px;
+            font-weight: 600;
+            color: #262730;
+            margin-bottom: 20px;
+        }
+
+        .product-title {
+            font-weight: 750;
+            font-size: 16px;
+            margin-bottom: 9px;
+            min-height: 70px;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #FF4B4B;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            font-weight: 480;
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-style: italic;
+            min-height: 42px;
+        }
+
+        .product-stock {
+            font-weight: 500;
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .low-stock {
+            color: #FF4B4B;
+            font-weight: 600;
+        }
+
+        .stats-container {
+            background-color: #F0F2F6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .total-price {
+            background-color: #F8F9FA;
+            color: #FF4B4B;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .whatsapp-link {
+            display: block;
+            background-color: #25D366;
+            color: white !important;
+            padding: 10px 15px;
+            text-decoration: none !important;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .whatsapp-link:hover {
+            background-color: #128C7E;
+            color: white !important;
+        }
+
+        .out-of-stock-button {
+            display: block;
+            background-color: #CCCCCC;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .menu-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FF4B4B;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            background-color: #F8F9FA;
+            border-radius: 8px;
+        }
+
+        div[data-testid="stImage"] img {
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            border-radius: 12px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# =========================================================
+# PRODUCT DATA
+# =========================================================
+
 products = [
     {
         "id": 1,
-        "name": "Car door Mat",
+        "name": "Car Door Mat",
         "price": 255.00,
-        "category": "Accesories",
+        "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "Can be used on both side Silver and Black with four mats",
+        "description": (
+            "Can be used on both sides. Silver and black "
+            "with four mats."
+        ),
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
-            "https://i.imgur.com/VGZJ8iM.jpeg"
-            
-        ]
+            "https://i.imgur.com/VGZJ8iM.jpeg",
+        ],
     },
     {
         "id": 2,
-        "name": "48VH 12000 mAh Electric Car Washing Machine Water spray",
+        "name": (
+            "48VH 12000 mAh Electric Car Washing "
+            "Machine Water Spray"
+        ),
         "price": 425.00,
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
-        "description": "color: black",
+        "description": "Colour: Black",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
             "https://i.imgur.com/zpHfaab.jpeg",
             "https://i.imgur.com/xLfWrez.jpeg",
-            "https://i.imgur.com/hu121Vg.jpeg"
-        ]
+            "https://i.imgur.com/hu121Vg.jpeg",
+        ],
     },
     {
         "id": 3,
-        "name": " Windshield sun shade UV Protector",
+        "name": "Windshield Sun Shade UV Protector",
         "price": 145.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "L27.56 X W57 inch",
+        "description": "L27.56 × W57 inches",
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true",
-            
-        ]
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/psolfg-800x1091.jpg?raw=true"
+            ),
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/a2-800x1091.jpg?raw=true"
+            ),
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/edf-800x1091.jpg?raw=true"
+            ),
+        ],
     },
     {
         "id": 4,
-        "name": "Foldable Windshield Sun UV Rays Blocking Shade Umbrella  ",
+        "name": (
+            "Foldable Windshield Sun UV Rays "
+            "Blocking Shade Umbrella"
+        ),
         "price": 155.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233246729676",
-        "description": "(L6.5 x W12.5)cm / (L2.55 x W4.9)inch - Small/B Style ",
+        "description": (
+            "(L6.5 × W12.5) cm / "
+            "(L2.55 × W4.9) inches, Small/B Style"
+        ),
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunsheild.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunshieldlength.jpg?raw=true",
-        ]
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/foldsunsheild.jpg?raw=true"
+            ),
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/foldsunshieldlength.jpg?raw=true"
+            ),
+        ],
     },
     {
         "id": 5,
-        "name":"48VH 12000 mAh Electric Car Washing Machine Water spray   ",
+        "name": (
+            "48VH 12000 mAh Electric Car Washing "
+            "Machine Water Spray"
+        ),
         "price": 425.00,
         "category": "Electronics",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "color: black for all car washing",
+        "description": "Colour: Black, suitable for car washing.",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
             "https://i.imgur.com/zpHfaab.jpeg",
             "https://i.imgur.com/xLfWrez.jpeg",
-            "https://i.imgur.com/hu121Vg.jpeg"
-        ]
+            "https://i.imgur.com/hu121Vg.jpeg",
+        ],
     },
     {
         "id": 6,
-        "name":"Tomatoes",
+        "name": "Tomatoes",
         "price": 50.00,
-        "category": "Food",
+        "category": "Food Stuff",
         "stock": 30,
         "whatsapp_number": "233547568955",
-        "description": "Per Olonka rubber",
+        "description": "Price per Olonka rubber.",
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/tomatoes.jpg?raw=true",
-
-        ]
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/tomatoes.jpg?raw=true"
+            ),
+        ],
     },
     {
         "id": 7,
-        "name":"Pepper",
+        "name": "Pepper",
         "price": 15.00,
-        "category": "Food",
+        "category": "Food Stuff",
         "stock": 30,
         "whatsapp_number": "233547568955",
-        "description": "Per Olonka rubber",
+        "description": "Price per Olonka rubber.",
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
-
-        ]
-    }
+            (
+                "https://github.com/InstilKay/Market_Instil/"
+                "blob/main/Pepper.jpg?raw=true"
+            ),
+        ],
+    },
 ]
 
-# Function to create WhatsApp message
-def create_whatsapp_message(product_name, product_price, whatsapp_number):
-    message = f"Hello! I would like to buy the {product_name} for GHS {product_price:.2f}. Please let me know about availability and payment options."
-    encoded_message = urllib.parse.quote(message)
-    return f"https://wa.me/{whatsapp_number}?text={encoded_message}"
 
-# Initialize session state for image selection
-if 'selected_image_index' not in st.session_state:
+# =========================================================
+# SESSION STATE
+# =========================================================
+
+if "selected_category" not in st.session_state:
+    st.session_state.selected_category = "All"
+
+if "show_categories" not in st.session_state:
+    st.session_state.show_categories = False
+
+if "selected_image_index" not in st.session_state:
     st.session_state.selected_image_index = {}
 
-# Function to handle image selection
+if "submitted_requests" not in st.session_state:
+    st.session_state.submitted_requests = {}
+
+
 def get_selected_image_index(product_id):
-    return st.session_state.selected_image_index.get(product_id, 0)
+    return st.session_state.selected_image_index.get(
+        product_id,
+        0,
+    )
+
 
 def set_selected_image_index(product_id, index):
     st.session_state.selected_image_index[product_id] = index
 
-# Initialize session state
-if 'selected_category' not in st.session_state:
-    st.session_state.selected_category = "All"
-if 'show_categories' not in st.session_state:
-    st.session_state.show_categories = False
 
-# Header section
-st.markdown('<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>', unsafe_allow_html=True)
-st.markdown("Discover the latest trends and shop your favorite products")
+# =========================================================
+# HEADER
+# =========================================================
 
-# Main Menu Button on Homepage
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    if st.button("📋 OPEN MENU", key="main_menu_button", use_container_width=True):
-        st.session_state.show_categories = not st.session_state.show_categories
+st.markdown(
+    '<h1 class="main-header">🛍️ Pika Market Hub Ghana</h1>',
+    unsafe_allow_html=True,
+)
 
-# Display categories if menu is open
+st.markdown(
+    """
+    <div class="main-description">
+        Discover exciting products and place your request
+        directly with the seller.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# =========================================================
+# MAIN MENU
+# =========================================================
+
+menu_col1, menu_col2, menu_col3 = st.columns([1, 2, 1])
+
+with menu_col2:
+    if st.button(
+        "📋 OPEN MENU",
+        key="main_menu_button",
+        use_container_width=True,
+    ):
+        st.session_state.show_categories = (
+            not st.session_state.show_categories
+        )
+
+
+category_list = [
+    "All",
+    "Electronics",
+    "Clothing",
+    "Accessories",
+    "Beauty",
+    "Footwear",
+    "Food Stuff",
+]
+
+
 if st.session_state.show_categories:
     st.markdown("---")
     st.markdown("### 🏷️ Product Categories")
-    
-    categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear","Food"]
-    
-    # Create a grid of category buttons
-    cols = st.columns(3)
-    for i, category in enumerate(categories):
-        with cols[i % 3]:
-            if st.button(f"📦 {category}", key=f"main_cat_{category}", use_container_width=True):
+
+    category_columns = st.columns(3)
+
+    for category_index, category in enumerate(category_list):
+        with category_columns[category_index % 3\]:
+            if st.button(
+                f"📦 {category}",
+                key=f"main_category_{category}",
+                use_container_width=True,
+            ):
                 st.session_state.selected_category = category
                 st.session_state.show_categories = False
                 st.rerun()
 
-# Sidebar with categories and statistics
-st.sidebar.markdown('<div class="menu-header">📋 QUICK MENU</div>', unsafe_allow_html=True)
 
-categories = ["All", "Electronics", "Clothing", "Accessories", "Beauty", "Footwear","Food"]
+# =========================================================
+# SIDEBAR
+# =========================================================
 
-# Create category buttons in sidebar
-for category in categories:
+st.sidebar.markdown(
+    '<div class="menu-header">📋 QUICK MENU</div>',
+    unsafe_allow_html=True,
+)
+
+for category in category_list:
     if st.sidebar.button(
-        f"🏷️ {category}", 
-        key=f"sidebar_cat_{category}",
-        use_container_width=True
+        f"🏷️ {category}",
+        key=f"sidebar_category_{category}",
+        use_container_width=True,
     ):
         st.session_state.selected_category = category
         st.rerun()
 
-# Display selected category
-st.sidebar.markdown("---")
-st.sidebar.markdown(f"**Selected Category:** {st.session_state.selected_category}")
 
-# Display inventory statistics in sidebar
+st.sidebar.markdown("---")
+st.sidebar.markdown(
+    f"**Selected Category:** "
+    f"{st.session_state.selected_category}"
+)
+
+
 total_products = len(products)
-available_products = sum(1 for p in products if p["stock"] > 0)
-out_of_stock_products = total_products - available_products
+
+available_products = sum(
+    1 for product in products
+    if product["stock"] > 0
+)
+
+out_of_stock_products = (
+    total_products - available_products
+)
+
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("## 📊 Inventory Stats")
+st.sidebar.markdown("## 📊 Inventory Statistics")
 st.sidebar.metric("Total Products", total_products)
 st.sidebar.metric("Available Products", available_products)
 st.sidebar.metric("Out of Stock", out_of_stock_products)
 
-# Filter products by category
-if st.session_state.selected_category != "All":
-    filtered_products = [p for p in products if p["category"] == st.session_state.selected_category]
-else:
+
+# =========================================================
+# FILTER PRODUCTS
+# =========================================================
+
+if st.session_state.selected_category == "All":
     filtered_products = products
+else:
+    filtered_products = [
+        product
+        for product in products
+        if product["category"]
+        == st.session_state.selected_category
+    ]
 
-# Display category statistics
-available_in_category = sum(1 for p in filtered_products if p["stock"] > 0)
-st.markdown(f'<div class="stats-container">', unsafe_allow_html=True)
-st.markdown(f"**{st.session_state.selected_category} Category:** {len(filtered_products)} products ({available_in_category} available, {len(filtered_products) - available_in_category} out of stock)")
-st.markdown('</div>', unsafe_allow_html=True)
 
-# Display products in a grid
-st.markdown(f'<div class="sub-header">{st.session_state.selected_category} Products</div>', unsafe_allow_html=True)
+available_in_category = sum(
+    1 for product in filtered_products
+    if product["stock"] > 0
+)
 
-# Create columns for product grid
-cols = st.columns(4)
+out_of_stock_in_category = (
+    len(filtered_products) - available_in_category
+)
 
-for index, product in enumerate(filtered_products):
-    with cols[index % 4]:
-        # Product card
-        st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
-        
-        # Handle multiple images with carousel
-        if len(product["image_urls"]) > 0:
-            current_index = get_selected_image_index(product["id"])
-            total_images = len(product["image_urls"])
-            
-            # Image container with carousel
-            st.markdown(f'''
-            <div class="product-image-container">
-                <img src="{product["image_urls"][current_index]}" class="product-main-image" alt="{product["name"]}">
-                <div class="image-counter">{current_index + 1}/{total_images}</div>
-            ''', unsafe_allow_html=True)
-            
-            # Navigation buttons (only show if multiple images)
-            if total_images > 1:
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col1:
-                    if st.button("◀", key=f"prev_{product['id']}"):
-                        new_index = (current_index - 1) % total_images
-                        set_selected_image_index(product["id"], new_index)
-                        st.rerun()
-                
-                with col3:
-                    if st.button("▶", key=f"next_{product['id']}"):
-                        new_index = (current_index + 1) % total_images
-                        set_selected_image_index(product["id"], new_index)
-                        st.rerun()
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-        
-        st.markdown(f'<div class="product-title">{product["name"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="product-price">GHS {product["price"]:.2f}</div>', unsafe_allow_html=True)
-        
-        # Add description if it exists - MOVED INSIDE THE PRODUCT LOOP
-        if "description" in product:
-            st.markdown(f'<div class="product-description">{product["description"]}</div>', unsafe_allow_html=True)
-        
-        # Display stock information
-        if product["stock"] > 0:
-            stock_class = "low-stock" if product["stock"] < 5 else ""
-            st.markdown(f'<div class="product-stock {stock_class}">In stock: {product["stock"]} available</div>', unsafe_allow_html=True)
-            
-            # Create WhatsApp link
-            whatsapp_url = create_whatsapp_message(product["name"], product["price"], product["whatsapp_number"])
-            st.markdown(f'<a href="{whatsapp_url}" target="_blank" class="whatsapp-link">Buy Now on WhatsApp</a>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div class="product-stock low-stock">Out of stock</div>', unsafe_allow_html=True)
-            st.markdown(f'<button class="buy-button" disabled>Out of Stock</button>', unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
-# Add some spacing
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-# Footer
-st.markdown("---")
 st.markdown(
-    """
-    <div style="text-align: center; color: #666;">
-        <p>© 2023 Pika market square Hub Ghana - Modern Shopping Experience. Call us or send an email to advertise your products here </p>
-        <p>All prices in Ghana Cedis (GHS) | Contact us: +233 27 569 6787 | instilpee@gmail.com</p>
-        <p><strong>Disclaimer:</strong>Please note this application is solely responsible for connecting buyers to sellers only, any other due diligue is your responsiblity </p>
-        <p>Click "Buy Now on WhatsApp" to contact seller directly about your order</p>
+    f"""
+    <div class="stats-container">
+        <strong>
+            {st.session_state.selected_category} Category:
+        </strong>
+        {len(filtered_products)} product(s),
+        {available_in_category} available and
+        {out_of_stock_in_category} out of stock.
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    f"""
+    <div class="sub-header">
+        {st.session_state.selected_category} Products
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# =========================================================
+# DISPLAY PRODUCTS
+# =========================================================
+
+if not filtered_products:
+    st.info(
+        "There are currently no products in this category."
+    )
+
+else:
+    product_columns = st.columns(4)
+
+    for index, product in enumerate(filtered_products):
+        with product_columns[index % 4]:
+
+
+            with st.container(border=True):
+
+                # -----------------------------------------
+                # PRODUCT IMAGE CAROUSEL
+                # -----------------------------------------
+
+                image_urls = product.get("image_urls", [])
+
+                if image_urls:
+                    current_index = get_selected_image_index(
+                        product["id"]
+                    )
+
+                    total_images = len(image_urls)
+
+                    # Prevent an invalid image index.
+                    if current_index >= total_images:
+                        current_index = 0
+                        set_selected_image_index(
+                            product["id"],
+                            0,
+                        )
+
+                    st.image(
+                        image_urls[current_index],
+                        use_container_width=True,
+                    )
+
+                    st.caption(
+                        f"Image {current_index + 1} "
+                        f"of {total_images}"
+                    )
+
+                    if total_images > 1:
+                        previous_column, next_column = st.columns(2)
+
+                        with previous_column:
+                            if st.button(
+                                "◀ Previous",
+                                key=f"previous_{product['id']}",
+                                use_container_width=True,
+                            ):
+                                new_index = (
+                                    current_index - 1
+                                ) % total_images
+
+                                set_selected_image_index(
+                                    product["id"],
+                                    new_index,
+                                )
+
+                                st.rerun()
+
+                        with next_column:
+                            if st.button(
+                                "Next ▶",
+                                key=f"next_{product['id']}",
+                                use_container_width=True,
+                            ):
+                                new_index = (
+                                    current_index + 1
+                                ) % total_images
+
+                                set_selected_image_index(
+                                    product["id"],
+                                    new_index,
+                                )
+
+                                st.rerun()
+
+                else:
+                    st.info("No product image available.")
+
+                # -----------------------------------------
+                # PRODUCT INFORMATION
+                # -----------------------------------------
+
+                st.markdown(
+                    f"""
+                    <div class="product-title">
+                        {product["name"]}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                st.markdown(
+                    f"""
+                    <div class="product-price">
+                        GHS {product["price"\]:,.2f}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                st.markdown(
+                    f"""
+                    <div class="product-description">
+                        {product["description"]}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # -----------------------------------------
+                # QUANTITY AND REQUEST SUBMISSION
+                # -----------------------------------------
+
+                if product["stock"] > 0:
+
+                    stock_class = (
+                        "low-stock"
+                        if product["stock"] < 5
+                        else ""
+                    )
+
+                    st.markdown(
+                        f"""
+                        <div class="product-stock {stock_class}">
+                            In stock: {product["stock"]} available
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    quantity = st.number_input(
+                        "Select quantity",
+                        min_value=1,
+                        max_value=int(product["stock"]),
+                        value=1,
+                        step=1,
+                        key=f"quantity_{product['id']}",
+                    )
+
+                    total_price = (
+                        product["price"] * quantity
+                    )
+
+                    st.markdown(
+                        f"""
+                        <div class="total-price">
+                            Total: GHS {total_price:,.2f}
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    if st.button(
+                        "🛒 Submit Request",
+                        key=(
+                            f"submit_request_"
+                            f"{product['id']}"
+                        ),
+                        type="primary",
+                        use_container_width=True,
+                    ):
+                        success, message = (
+                            save_request_to_google_sheet(
+                                product_name=product["name"],
+                                quantity=quantity,
+                                unit_price=product["price"],
+                                total_price=total_price,
+                            )
+                        )
+
+                        if success:
+                            st.session_state.submitted_requests[
+                                product["id"]
+                            ] = {
+                                "quantity": int(quantity),
+                                "unit_price": product["price"],
+                                "total_price": total_price,
+                            }
+
+                            st.success(message)
+
+                        else:
+                            st.error(message)
+
+                    # Retrieve the latest successfully
+                    # submitted request for this product.
+                    submitted_request = (
+                        st.session_state
+                        .submitted_requests
+                        .get(product["id"])
+                    )
+
+                    if submitted_request:
+                        submitted_quantity = (
+                            submitted_request["quantity"]
+                        )
+
+                        submitted_total = (
+                            submitted_request["total_price"]
+                        )
+
+                        whatsapp_url = (
+                            create_whatsapp_message(
+                                product_name=product["name"],
+                                unit_price=product["price"],
+                                quantity=submitted_quantity,
+                                whatsapp_number=(
+                                    product[
+                                        "whatsapp_number"
+                                    ]
+                                ),
+                            )
+                        )
+
+                        st.info(
+                            "Saved order: "
+                            f"{submitted_quantity} item(s), "
+                            f"GHS {submitted_total:,.2f}"
+                        )
+
+                        st.markdown(
+                            f"""
+                            {whatsapp_url}
+                                Continue Order on WhatsApp
+                            </a>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+
+                else:
+                    st.markdown(
+                        """
+                        <div class="product-stock low-stock">
+                            Out of stock
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    st.markdown(
+                        """
+                        <div class="out-of-stock-button">
+                            Out of Stock
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("---")
+
+st.markdown(
+    """
+    <div style="text-align: center; color: #666666;">
+        <p>
+            © 2026 Pika Market Hub Ghana.
+            A modern shopping experience.
+        </p>
+
+        <p>
+            Call or email us to advertise your products here.
+        </p>
+
+        <p>
+            All prices are in Ghana Cedis (GHS).
+            Contact: +233 27 569 6787 |
+            instilpee@gmail.com
+        </p>
+
+        <p>
+            <strong>Disclaimer:</strong>
+            This application is solely responsible for
+            connecting buyers with sellers. Buyers and sellers
+            are responsible for conducting the necessary due
+            diligence before completing any transaction.
+        </p>
+
+        <p>
+            Select a quantity, submit the request and click
+            “Continue Order on WhatsApp” to contact the seller.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
