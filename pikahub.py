@@ -6,13 +6,6 @@ import streamlit as st
 from google.oauth2.service_account import Credentials
 
 
-
-db_username = st.secrets["DB_USERNAME"]
-db_token = st.secrets["DB_TOKEN"]
-
-
-
-
 # =========================================================
 # PAGE CONFIGURATION
 # =========================================================
