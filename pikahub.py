@@ -6,6 +6,13 @@ import streamlit as st
 from google.oauth2.service_account import Credentials
 
 
+
+db_username = st.secrets["DB_USERNAME"]
+db_token = st.secrets["DB_TOKEN"]
+
+st.write(f"User: {db_username}")
+
+
 # =========================================================
 # PAGE CONFIGURATION
 # =========================================================
@@ -885,11 +892,11 @@ st.markdown(
             A modern shopping experience.
         </p>
 
-        <p>
+      
             Call or email us to advertise your products here.
         </p>
 
-        <p>
+   
             All prices are in Ghana Cedis (GHS).
             Contact: +233 27 569 6787 |
             instilpee@gmail.com
