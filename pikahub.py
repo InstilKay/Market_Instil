@@ -2,7 +2,6 @@ import urllib.parse
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import gspread
-import gspread
 import streamlit as st
 from google.oauth2.service_account import Credentials
 
