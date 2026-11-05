@@ -109,8 +109,8 @@ def get_admin_credentials():
     try:
         if "admin" in st.secrets:
             return (
-                str(st.secrets["admin"]["pika@member"]),
-                str(st.secrets["admin"]["dontcometoclose@"]),
+                str(st.secrets["admin"]["username"]),
+                str(st.secrets["admin"]["password"]),
             )
 
         return (
