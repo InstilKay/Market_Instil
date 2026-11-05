@@ -352,12 +352,12 @@ products = [
     },
     {
         "id": 5,
-        "name": "48VH 12000 mAh Electric Car Washing Machine Water Spray",
+        "name": "Electric Car Washing Machine Water Spray",
         "price": 425.00,
         "category": "Electronics",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": "Colour: Black, suitable for car washing.",
+        "description": "48VH 12000 mAh ,Colour: Black, suitable for car washing.",
         "image_urls": [
             "https://i.imgur.com/IptLBNh.jpeg",
             "https://i.imgur.com/TE9aAh6.jpeg",
@@ -390,7 +390,19 @@ products = [
             "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
         ],
     },
-]
+],{
+        "id": 8,
+        "name": "Seat Massager",
+        "price": 395.00,
+        "category": "Electronics",
+        "stock": 30,
+        "whatsapp_number": "233547568955",
+        "description": "2 in 1 Electronic Heated Vibrating Massage Mat,Home & Car Massage Cushion with 4 Modes built in controller & Timer 
+        .",
+        "image_urls": [
+            "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
+        ],
+    },
 
 
 # =========================================================
