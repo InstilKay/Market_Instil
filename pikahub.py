@@ -32,15 +32,16 @@ def connect_to_supabase():
 supabase = connect_to_supabase()
 
 
-def save_request_to_supabase(product_name, quantity, total_price):
-    """
-    Save a request to the Supabase orders table.
-
-    Expected columns:
-    id, product, quantity, price, order_date
-    """
+def save_request_to_supabase(
+    customer_name,
+    product_name,
+    quantity,
+    total_price,
+):
+    """Save a customer request to the Supabase orders table."""
     try:
         order_data = {
+            "customer_name": str(customer_name).strip(),
             "product": str(product_name),
             "quantity": int(quantity),
             "price": float(total_price),
@@ -66,16 +67,19 @@ def save_request_to_supabase(product_name, quantity, total_price):
 # =========================================================
 
 def create_whatsapp_message(
+    customer_name,
     product_name,
     unit_price,
     quantity,
     whatsapp_number,
 ):
-    """Create a WhatsApp URL containing the order details."""
-    total_price = unit_price * quantity
+    """Create a WhatsApp URL containing the customer and order details."""
+    total_price = float(unit_price) * int(quantity)
 
     message = (
-        "Hello! I would like to place the following order:\n\n"
+        f"Hello! My name is {customer_name}.\n\n"
+        "I would like to place the following order:\n\n"
+        f"Customer Name: {customer_name}\n"
         f"Product: {product_name}\n"
         f"Quantity: {quantity}\n"
         f"Unit Price: GHS {unit_price:,.2f}\n"
@@ -158,6 +162,14 @@ st.markdown(
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
+        }
+
+        .customer-container {
+            background-color: #F8F9FA;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0 25px 0;
         }
 
         .total-price {
@@ -243,10 +255,7 @@ products = [
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233275696787",
-        "description": (
-            "Can be used on both sides. Silver and black "
-            "with four mats."
-        ),
+        "description": "Can be used on both sides. Silver and black with four mats.",
         "image_urls": [
             "https://i.imgur.com/3TJlx72.jpeg",
             "https://i.imgur.com/VGZJ8iM.jpeg",
@@ -254,10 +263,7 @@ products = [
     },
     {
         "id": 2,
-        "name": (
-            "48VH 12000 mAh Electric Car Washing "
-            "Machine Water Spray"
-        ),
+        "name": "48VH 12000 mAh Electric Car Washing Machine Water Spray",
         "price": 425.00,
         "category": "Accessories",
         "stock": 4,
@@ -280,51 +286,27 @@ products = [
         "whatsapp_number": "233275696787",
         "description": "L27.56 × W57 inches.",
         "image_urls": [
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/psolfg-800x1091.jpg?raw=true"
-            ),
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/a2-800x1091.jpg?raw=true"
-            ),
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/edf-800x1091.jpg?raw=true"
-            ),
+            "https://github.com/InstilKay/Market_Instil/blob/main/psolfg-800x1091.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/a2-800x1091.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/edf-800x1091.jpg?raw=true",
         ],
     },
     {
         "id": 4,
-        "name": (
-            "Foldable Windshield Sun UV Rays "
-            "Blocking Shade Umbrella"
-        ),
+        "name": "Foldable Windshield Sun UV Rays Blocking Shade Umbrella",
         "price": 155.00,
         "category": "Accessories",
         "stock": 5,
         "whatsapp_number": "233246729676",
-        "description": (
-            "(L6.5 × W12.5) cm / "
-            "(L2.55 × W4.9) inches, Small/B Style."
-        ),
+        "description": "(L6.5 × W12.5) cm / (L2.55 × W4.9) inches, Small/B Style.",
         "image_urls": [
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/foldsunsheild.jpg?raw=true"
-            ),
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/foldsunshieldlength.jpg?raw=true"
-            ),
+            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunsheild.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/foldsunshieldlength.jpg?raw=true",
         ],
     },
     {
         "id": 5,
-        "name": (
-            "48VH 12000 mAh Electric Car Washing "
-            "Machine Water Spray"
-        ),
+        "name": "48VH 12000 mAh Electric Car Washing Machine Water Spray",
         "price": 425.00,
         "category": "Electronics",
         "stock": 5,
@@ -347,10 +329,7 @@ products = [
         "whatsapp_number": "233547568955",
         "description": "Price per Olonka rubber.",
         "image_urls": [
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/tomatoes.jpg?raw=true"
-            ),
+            "https://github.com/InstilKay/Market_Instil/blob/main/tomatoes.jpg?raw=true",
         ],
     },
     {
@@ -362,10 +341,7 @@ products = [
         "whatsapp_number": "233547568955",
         "description": "Price per Olonka rubber.",
         "image_urls": [
-            (
-                "https://github.com/InstilKay/Market_Instil/"
-                "blob/main/Pepper.jpg?raw=true"
-            ),
+            "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
         ],
     },
 ]
@@ -417,6 +393,27 @@ st.markdown(
 
 
 # =========================================================
+# CUSTOMER NAME
+# =========================================================
+
+st.markdown(
+    """
+    <div class="customer-container">
+        <strong>Customer details</strong><br>
+        Enter your name before submitting a product request.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+customer_name = st.text_input(
+    "Your full name",
+    placeholder="Enter your full name",
+    key="customer_name",
+)
+
+
+# =========================================================
 # MAIN MENU
 # =========================================================
 
@@ -428,9 +425,7 @@ with menu_col2:
         key="main_menu_button",
         use_container_width=True,
     ):
-        st.session_state.show_categories = (
-            not st.session_state.show_categories
-        )
+        st.session_state.show_categories = not st.session_state.show_categories
 
 
 category_list = [
@@ -488,9 +483,7 @@ st.sidebar.markdown(
 
 
 total_products = len(products)
-available_products = sum(
-    1 for product in products if product["stock"] > 0
-)
+available_products = sum(1 for product in products if product["stock"] > 0)
 out_of_stock_products = total_products - available_products
 
 
@@ -518,9 +511,7 @@ else:
 available_in_category = sum(
     1 for product in filtered_products if product["stock"] > 0
 )
-out_of_stock_in_category = (
-    len(filtered_products) - available_in_category
-)
+out_of_stock_in_category = len(filtered_products) - available_in_category
 
 
 st.markdown(
@@ -559,16 +550,11 @@ else:
         with product_columns[index % 4]:
             with st.container(border=True):
 
-                # -----------------------------------------
                 # IMAGE CAROUSEL
-                # -----------------------------------------
-
                 image_urls = product.get("image_urls", [])
 
                 if image_urls:
-                    current_index = get_selected_image_index(
-                        product["id"]
-                    )
+                    current_index = get_selected_image_index(product["id"])
                     total_images = len(image_urls)
 
                     if current_index >= total_images:
@@ -580,9 +566,7 @@ else:
                         use_container_width=True,
                     )
 
-                    st.caption(
-                        f"Image {current_index + 1} of {total_images}"
-                    )
+                    st.caption(f"Image {current_index + 1} of {total_images}")
 
                     if total_images > 1:
                         previous_column, next_column = st.columns(2)
@@ -593,13 +577,8 @@ else:
                                 key=f"previous_{product['id']}",
                                 use_container_width=True,
                             ):
-                                new_index = (
-                                    current_index - 1
-                                ) % total_images
-                                set_selected_image_index(
-                                    product["id"],
-                                    new_index,
-                                )
+                                new_index = (current_index - 1) % total_images
+                                set_selected_image_index(product["id"], new_index)
                                 st.rerun()
 
                         with next_column:
@@ -608,22 +587,14 @@ else:
                                 key=f"next_{product['id']}",
                                 use_container_width=True,
                             ):
-                                new_index = (
-                                    current_index + 1
-                                ) % total_images
-                                set_selected_image_index(
-                                    product["id"],
-                                    new_index,
-                                )
+                                new_index = (current_index + 1) % total_images
+                                set_selected_image_index(product["id"], new_index)
                                 st.rerun()
 
                 else:
                     st.info("No product image available.")
 
-                # -----------------------------------------
                 # PRODUCT INFORMATION
-                # -----------------------------------------
-
                 st.markdown(
                     f'<div class="product-title">{product["name"]}</div>',
                     unsafe_allow_html=True,
@@ -643,14 +614,9 @@ else:
                     unsafe_allow_html=True,
                 )
 
-                # -----------------------------------------
                 # QUANTITY AND REQUEST SUBMISSION
-                # -----------------------------------------
-
                 if product["stock"] > 0:
-                    stock_class = (
-                        "low-stock" if product["stock"] < 5 else ""
-                    )
+                    stock_class = "low-stock" if product["stock"] < 5 else ""
 
                     st.markdown(
                         f'<div class="product-stock {stock_class}">'
@@ -668,9 +634,7 @@ else:
                         key=f"quantity_{product['id']}",
                     )
 
-                    total_price = (
-                        float(product["price"]) * int(quantity)
-                    )
+                    total_price = float(product["price"]) * int(quantity)
 
                     st.markdown(
                         f'<div class="total-price">'
@@ -685,61 +649,69 @@ else:
                         type="primary",
                         use_container_width=True,
                     ):
-                        success, message = save_request_to_supabase(
-                            product_name=product["name"],
-                            quantity=quantity,
-                            total_price=total_price,
-                        )
+                        cleaned_customer_name = customer_name.strip()
 
-                        if success:
-                            st.session_state.submitted_requests[
-                                product["id"]
-                            ] = {
-                                "quantity": int(quantity),
-                                "unit_price": float(
-                                    product["price"]
-                                ),
-                                "total_price": float(total_price),
-                            }
-                            st.success(message)
+                        if not cleaned_customer_name:
+                            st.warning(
+                                "Please enter your full name at the top of the page "
+                                "before submitting your request."
+                            )
+                        elif len(cleaned_customer_name) < 2:
+                            st.warning("Please enter a valid customer name.")
                         else:
-                            st.error(message)
+                            success, message = save_request_to_supabase(
+                                customer_name=cleaned_customer_name,
+                                product_name=product["name"],
+                                quantity=quantity,
+                                total_price=total_price,
+                            )
 
-                    # -------------------------------------
+                            if success:
+                                st.session_state.submitted_requests[
+                                    product["id"]
+                                ] = {
+                                    "customer_name": cleaned_customer_name,
+                                    "quantity": int(quantity),
+                                    "unit_price": float(product["price"]),
+                                    "total_price": float(total_price),
+                                }
+
+                                st.success(
+                                    f"Thank you, {cleaned_customer_name}! "
+                                    "Your request was saved successfully."
+                                )
+                            else:
+                                st.error(message)
+
                     # WHATSAPP LINK AFTER SUCCESSFUL SAVE
-                    # -------------------------------------
-
-                    submitted_request = (
-                        st.session_state.submitted_requests.get(
-                            product["id"]
-                        )
+                    submitted_request = st.session_state.submitted_requests.get(
+                        product["id"]
                     )
 
                     if submitted_request:
-                        submitted_quantity = submitted_request[
-                            "quantity"
+                        submitted_customer_name = submitted_request[
+                            "customer_name"
                         ]
-                        submitted_total = submitted_request[
-                            "total_price"
-                        ]
+                        submitted_quantity = submitted_request["quantity"]
+                        submitted_total = submitted_request["total_price"]
 
                         whatsapp_url = create_whatsapp_message(
+                            customer_name=submitted_customer_name,
                             product_name=product["name"],
                             unit_price=product["price"],
                             quantity=submitted_quantity,
-                            whatsapp_number=product[
-                                "whatsapp_number"
-                            ],
+                            whatsapp_number=product["whatsapp_number"],
                         )
 
                         st.info(
-                            f"Saved order: {submitted_quantity} "
-                            f"item(s), GHS {submitted_total:,.2f}"
+                            f"Order for {submitted_customer_name}: "
+                            f"{submitted_quantity} item(s), "
+                            f"GHS {submitted_total:,.2f}"
                         )
 
                         st.markdown(
                             f'<a href="{whatsapp_url}" '
-                            f'target="_blank" '
+                            f'target="_blank" rel="noopener noreferrer" '
                             f'class="whatsapp-link">'
                             f'Continue Order on WhatsApp'
                             f'</a>',
@@ -796,7 +768,7 @@ st.markdown(
         </p>
 
         <p>
-            Select a quantity, submit the request and click
+            Enter your name, select a quantity, submit the request and click
             “Continue Order on WhatsApp” to contact the seller.
         </p>
     </div>
