@@ -310,7 +310,7 @@ products = [
     {
         "id": 2,
         "name": " Electric Car Washing Machine Water Spray",
-        "price": 425.00,
+        "price": 390.00,
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
