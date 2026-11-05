@@ -400,7 +400,8 @@ products = [
         "description": "2 in 1 Electronic Heated Vibrating Massage Mat,Home & Car Massage Cushion with 4 Modes built in controller & Timer 
         .",
         "image_urls": [
-            "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage2.jpg?raw=true",
         ],
     },
 
