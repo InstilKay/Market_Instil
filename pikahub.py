@@ -390,7 +390,7 @@ products = [
             "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
         ],
     },
-],{
+{
         "id": 8,
         "name": "Seat Massager",
         "price": 395.00,
