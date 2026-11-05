@@ -314,7 +314,7 @@ products = [
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
-        "description": "Colour: Black.48VH 12000 mAh",
+        "description": "Colour: Black.48VH 21V",
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/spraygun.jpg?raw=true",
             "https://github.com/InstilKay/Market_Instil/blob/main/spraygun2.jpg?raw=true",
