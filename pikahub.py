@@ -363,6 +363,9 @@ if "selected_image_index" not in st.session_state:
 if "submitted_requests" not in st.session_state:
     st.session_state.submitted_requests = {}
 
+if "show_name_form" not in st.session_state:
+    st.session_state.show_name_form = {}
+
 
 def get_selected_image_index(product_id):
     return st.session_state.selected_image_index.get(product_id, 0)
@@ -389,27 +392,6 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True,
-)
-
-
-# =========================================================
-# CUSTOMER NAME
-# =========================================================
-
-st.markdown(
-    """
-    <div class="customer-container">
-        <strong>Customer details</strong><br>
-        Enter your name before submitting a product request.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-customer_name = st.text_input(
-    "Your full name",
-    placeholder="Enter your full name",
-    key="customer_name",
 )
 
 
@@ -643,45 +625,64 @@ else:
                         unsafe_allow_html=True,
                     )
 
+                    # First click only reveals the customer name field.
                     if st.button(
                         "🛒 Submit Request",
                         key=f"submit_request_{product['id']}",
                         type="primary",
                         use_container_width=True,
                     ):
-                        cleaned_customer_name = customer_name.strip()
+                        st.session_state.show_name_form[product["id"]] = True
 
-                        if not cleaned_customer_name:
-                            st.warning(
-                                "Please enter your full name at the top of the page "
-                                "before submitting your request."
-                            )
-                        elif len(cleaned_customer_name) < 2:
-                            st.warning("Please enter a valid customer name.")
-                        else:
-                            success, message = save_request_to_supabase(
-                                customer_name=cleaned_customer_name,
-                                product_name=product["name"],
-                                quantity=quantity,
-                                total_price=total_price,
-                            )
+                    # The name field is hidden until Submit Request is clicked.
+                    if st.session_state.show_name_form.get(product["id"], False):
+                        st.markdown("**Customer details**")
 
-                            if success:
-                                st.session_state.submitted_requests[
-                                    product["id"]
-                                ] = {
-                                    "customer_name": cleaned_customer_name,
-                                    "quantity": int(quantity),
-                                    "unit_price": float(product["price"]),
-                                    "total_price": float(total_price),
-                                }
+                        customer_name = st.text_input(
+                            "Your full name",
+                            placeholder="Enter your full name",
+                            key=f"customer_name_{product['id']}",
+                        )
 
-                                st.success(
-                                    f"Thank you, {cleaned_customer_name}! "
-                                    "Your request was saved successfully."
+                        if st.button(
+                            "✅ Confirm Request",
+                            key=f"confirm_request_{product['id']}",
+                            use_container_width=True,
+                        ):
+                            cleaned_customer_name = customer_name.strip()
+
+                            if not cleaned_customer_name:
+                                st.warning(
+                                    "Please enter your full name before confirming "
+                                    "your request."
                                 )
+                            elif len(cleaned_customer_name) < 2:
+                                st.warning("Please enter a valid customer name.")
                             else:
-                                st.error(message)
+                                success, message = save_request_to_supabase(
+                                    customer_name=cleaned_customer_name,
+                                    product_name=product["name"],
+                                    quantity=quantity,
+                                    total_price=total_price,
+                                )
+
+                                if success:
+                                    st.session_state.submitted_requests[
+                                        product["id"]
+                                    ] = {
+                                        "customer_name": cleaned_customer_name,
+                                        "quantity": int(quantity),
+                                        "unit_price": float(product["price"]),
+                                        "total_price": float(total_price),
+                                    }
+                                    st.session_state.show_name_form[product["id"]] = False
+
+                                    st.success(
+                                        f"Thank you, {cleaned_customer_name}! "
+                                        "Your request was saved successfully."
+                                    )
+                                else:
+                                    st.error(message)
 
                     # WHATSAPP LINK AFTER SUCCESSFUL SAVE
                     submitted_request = st.session_state.submitted_requests.get(
@@ -768,8 +769,8 @@ st.markdown(
         </p>
 
         <p>
-            Enter your name, select a quantity, submit the request and click
-            “Continue Order on WhatsApp” to contact the seller.
+            Select a quantity and click “Submit Request”. Enter your name when prompted,
+            confirm the request and click “Continue Order on WhatsApp” to contact the seller.
         </p>
     </div>
     """,
