@@ -403,7 +403,7 @@ products = [
         ),
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage.jpg?raw=true",
-            "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage2.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/seatmassager2.jpg",
         ],
     },
 ]
