@@ -378,7 +378,7 @@ products = [
             "https://github.com/InstilKay/Market_Instil/blob/main/tomatoes.jpg?raw=true",
         ],
     },
-    {
+        {
         "id": 7,
         "name": "Pepper",
         "price": 15.00,
@@ -390,19 +390,23 @@ products = [
             "https://github.com/InstilKay/Market_Instil/blob/main/Pepper.jpg?raw=true",
         ],
     },
-{
+    {
         "id": 8,
         "name": "Seat Massager",
         "price": 395.00,
         "category": "Electronics",
         "stock": 30,
         "whatsapp_number": "233547568955",
-        "description": "2 in 1 Electronic Heated Vibrating Massage Mat & Home  Car Massage Cushion with 4 Modes.",
+        "description": (
+            "2 in 1 Electronic Heated Vibrating Massage Mat "
+            "& Home Car Massage Cushion with 4 Modes."
+        ),
         "image_urls": [
             "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage.jpg?raw=true",
             "https://github.com/InstilKay/Market_Instil/blob/main/seatmassage2.jpg?raw=true",
         ],
     },
+]
 
 
 # =========================================================
