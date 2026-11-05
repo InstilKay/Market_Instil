@@ -309,18 +309,16 @@ products = [
     },
     {
         "id": 2,
-        "name": "48VH 12000 mAh Electric Car Washing Machine Water Spray",
+        "name": " Electric Car Washing Machine Water Spray",
         "price": 425.00,
         "category": "Accessories",
         "stock": 4,
         "whatsapp_number": "233275696787",
-        "description": "Colour: Black.",
+        "description": "Colour: Black.48VH 12000 mAh",
         "image_urls": [
-            "https://i.imgur.com/IptLBNh.jpeg",
-            "https://i.imgur.com/TE9aAh6.jpeg",
-            "https://i.imgur.com/zpHfaab.jpeg",
-            "https://i.imgur.com/xLfWrez.jpeg",
-            "https://i.imgur.com/hu121Vg.jpeg",
+            "https://github.com/InstilKay/Market_Instil/blob/main/spraygun.jpg?raw=true",
+            "https://github.com/InstilKay/Market_Instil/blob/main/spraygun2.jpg?raw=true",
+
         ],
     },
     {
